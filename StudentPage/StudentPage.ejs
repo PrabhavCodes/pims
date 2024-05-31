@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background-color: #4682b4;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        main {
+            margin: 20px;
+        }
+        h1 {
+            color: #4682b4;
+        }
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+        #userList {
+            margin-top: 20px;
+        }
+        .user-item {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .user-item p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome, <%= uname %></h1>
+    </header>
+    <main>
+        <p><strong>User ID:</strong> <%= userid %></p>
+        <p><strong>GPA:</strong> <%= ugpa %></p>
+
+        <div id="userList"></div>
+    </main>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('http://localhost:3000/company');
+                const users = await response.json();
+
+                // Display fetched users
+                const userListDiv = document.getElementById('userList');
+                userListDiv.innerHTML = ''; // Clear previous content
+                users.forEach(user => {
+                    const userElement = document.createElement('div');
+                    userElement.classList.add('user-item');
+                    userElement.innerHTML = `
+                        <p><strong>Company Name:</strong> ${user.companyname}</p>
+                        <p><strong>Required GPA:</strong> ${user.required_cgpa}</p>
+                        <p><strong>Location:</strong> ${user.location}</p>
+                    `;
+                    userListDiv.appendChild(userElement);
+                });
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        });
+    </script>
+</body>
+</html>
